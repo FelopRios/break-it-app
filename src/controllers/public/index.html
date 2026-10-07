@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BreakIt - Autenticación</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    .header {
+      background: linear-gradient(to bottom, #1b75bc, #429bd6);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px 8px 0 0;
+      margin: -2rem -2rem 1.5rem -2rem;
+    }
+    .header h1 { margin: 10px 0 0 0; letter-spacing: 2px; }
+    .icon-clock {
+      width: 50px;
+      height: 50px;
+      border: 2px solid white;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1b75bc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover { background-color: #155a92; }
+    .toggle-link {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #1b75bc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Vista de Login -->
+  <div class="card" id="loginCard">
+    <div class="header">
+      <div class="icon-clock">🕒</div>
+      <h1>BREAKIT</h1>
+    </div>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Correo electrónico" required>
+      <input type="password" id="loginPassword" placeholder="Contraseña" required>
+      <button type="submit">LOGIN</button>
+    </form>
+    <div class="toggle-link" onclick="toggleViews()">¿No tienes cuenta? Regístrate aquí</div>
+  </div>
+
+  <!-- Vista de Registro -->
+  <div class="card hidden" id="registerCard">
+    <div class="header">
+      <div class="icon-clock">🕒</div>
+      <h1>BREAKIT</h1>
+    </div>
+    <h3>REGISTRARSE</h3>
+    <form id="registerForm">
+      <input type="text" id="regName" placeholder="Nombre completo" required>
+      <input type="email" id="regEmail" placeholder="Correo electrónico" required>
+      <input type="password" id="regPassword" placeholder="Contraseña" required>
+      <button type="submit">REGISTRARSE</button>
+    </form>
+    <div class="toggle-link" onclick="toggleViews()">¿Ya tienes cuenta? (Login)</div>
+  </div>
+
+  <script>
+    function toggleViews() {
+      document.getElementById('loginCard').classList.toggle('hidden');
+      document.getElementById('registerCard').classList.toggle('hidden');
+    }
+
+    // Petición al Backend - Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        alert(res.ok ? '¡Inicio de sesión exitoso!' : (data.error || 'Error al iniciar sesión'));
+      } catch (err) {
+        alert('Error conectando con el servidor');
+      }
+    });
+
+    // Petición al Backend - Registro
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const displayName = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayName, email, password })
+        });
+        const data = await res.json();
+        alert(res.ok ? '¡Usuario registrado con éxito!' : (data.error || 'Error en el registro'));
+        if (res.ok) toggleViews();
+      } catch (err) {
+        alert('Error conectando con el servidor');
+      }
+    });
+  </script>
+</body>
+</html>
