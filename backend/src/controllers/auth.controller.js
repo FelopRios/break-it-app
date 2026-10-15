@@ -81,4 +81,12 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser };
+const loginTest = (req, res) => {
+    return res.status(200).json({
+        status: "success",
+        message: "Endpoint de login alcanzado correctamente",
+        timestamp: new Date().toISOString()
+    });
+};
+
+module.exports = { registerUser, loginTest };

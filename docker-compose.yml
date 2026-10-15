@@ -1,0 +1,34 @@
+services:
+  frontend-breakit:
+    container_name: breakit-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "8086:80"
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html:ro
+    depends_on:
+      - backend-breakit
+    networks:
+      - internal
+    restart: unless-stopped
+
+  backend-breakit:
+    container_name: breakit-backend
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    expose:
+      - "3501"
+    environment:
+      - API_KEY=${API_KEY}
+
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    driver: bridge
