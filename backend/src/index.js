@@ -8,10 +8,10 @@ const app = express();
 app.use(express.json());
 
 // Montar las rutas de autenticación
-app.use('/api/v1/auth', authRoutes);
+app.use(['/api/v1/auth', '/v1/auth/login'], authRoutes);
 
 // Montar las rutas de tareas
-app.use('/api/v1/tasks', taskRoutes);
+app.use(['/api/v1/tasks', '/v1/tasks'], taskRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
