@@ -10,7 +10,7 @@ const genAI = require('../config/gemini');
 const decomposeTask = async (taskDescription) => {
   // Inicializamos el modelo configurándolo para retornar exclusivamente JSON
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.6-flash",
+    model: "gemini-3.8-flash",
     // Instrucciones a nivel de sistema para guiar el comportamiento
     systemInstruction: "Eres un experto asistente de productividad. Tu objetivo es tomar tareas grandes o complejas y dividirlas en pequeños pasos accionables (microtareas). Tu respuesta DEBE ser únicamente un JSON válido.",
     generationConfig: {
