@@ -1,3 +1,4 @@
+const aiService = require('../service/ai.service.js');
 
 const decompose = async (req, res) => {
   try {
