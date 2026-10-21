@@ -3,6 +3,7 @@ services:
     build:
       context: ./frontend
     ports:
+    # estrategia de puertos en el mismo host, cambiando solo el puerto
       - "127.0.0.1:${FRONTEND_PORT:-8083}:80"
     volumes:
       - ./frontend/src:/usr/share/nginx/html:ro
