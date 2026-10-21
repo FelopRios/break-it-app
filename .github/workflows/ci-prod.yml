@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  run_pull:
+    name: run pull
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using ssh
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST_PROD }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
+          port: ${{ secrets.SSH_PORT }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE_PROD }}
+          script: |
+            cd /root/projects/ElectivaVDiurno/Breakit-prod/break-it-app
+            git fetch
+            git checkout ${{ secrets.PROD_BRANCH}}
+            git pull origin ${{ secrets.PROD_BRANCH}}
+            printf 'COMPOSE_PROJECT_NAME=breakit-prod\nFRONTEND_PORT=8085\n' > .env
+            chmod 600 .env
+            docker compose up -d --build
+            exit

@@ -21,5 +21,7 @@ jobs:
             git fetch
             git checkout ${{ secrets.DEV_BRANCH}}
             git pull origin ${{ secrets.DEV_BRANCH}}
+            printf 'COMPOSE_PROJECT_NAME=breakit-dev\nFRONTEND_PORT=8083\n' > .env
+            chmod 600 .env
             docker compose up -d --build
             exit

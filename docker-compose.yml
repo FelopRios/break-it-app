@@ -1,10 +1,9 @@
 services:
   frontend-breakit:
-    container_name: breakit-frontend
     build:
       context: ./frontend
     ports:
-      - "8083:80"
+      - "127.0.0.1:${FRONTEND_PORT:-8083}:80"
     volumes:
       - ./frontend/src:/usr/share/nginx/html:ro
     depends_on:
@@ -14,7 +13,6 @@ services:
     restart: unless-stopped
 
   backend-breakit:
-    container_name: breakit-backend
     build:
       context: ./backend
     volumes:
